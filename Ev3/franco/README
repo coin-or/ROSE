@@ -1,0 +1,35 @@
+Date: Wed, 9 Jun 2004 17:42:12 +0100 (BST)
+From: Franco Raimondi <franco@dcs.kcl.ac.uk>
+To: Leo <liberti@elet.polimi.it>
+Subject: :-)
+Parts/Attachments:
+   1 Shown     12 lines  Text
+   2   OK    ~1.1 KB     Text, ""
+   3   OK     ~10 KB     Text, ""
+   4   OK    ~4.7 KB     Text, ""
+----------------------------------------
+
+Wow, giornata produttiva. Beh, per i miei standard almeno.
+
+Se ti fai un bel:
+g++ -c -o bf1.o bf1.cxx [In un posto dove ci sia anche tree.cxx tuo]
+g++ -c -o mbf.o mbf.cxx
+e poi ./mbf, vedi qualcosa.
+In sostanza ho fatto +, *, ! e una cosa che si chiama PushNeg, che usa de
+Morgan per spingere dentro le negations.
+
+Domani mi do alle cnf (PushNeg e' il primo passo).
+
+Bai,
+F
+    [ Part 2, ""  Text/X-C++SRC (Name: "mbf.cxx")  25 lines. ]
+    [ Not Shown. Use the "V" command to view or save this part. ]
+
+
+    [ Part 3, ""  Text/X-C++SRC (Name: "bf1.cxx")  218 lines. ]
+    [ Not Shown. Use the "V" command to view or save this part. ]
+
+
+    [ Part 4, ""  Text/X-CHDR (Name: "bf.h")  103 lines. ]
+    [ Not Shown. Use the "V" command to view or save this part. ]
+

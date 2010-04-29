@@ -1,0 +1,234 @@
+# history file for Expression v3 project
+# RCS1 "$Id: HISTORY,v 1.21 2006/07/30 05:36:27 liberti Exp liberti $"
+
+010517	work started
+
+010518	basic classes seem to be working.
+
+010518	no makefile for now, compile with c++ -o main main.cxx
+
+010622	working on PlusLink - just started, copied it from PlusCopy,
+	have to modify it yet.
+
+010624	adapted the parser from the Eval project to work with
+	Expression v3.
+
+010721	porting to gcc 2.7.2.3, sigsegvs at parser.cxx:228
+
+010722	realized an IMMENSE mistake - we have to use Pointer<Expression>,
+	not just Expression, to enable to automatic garbage collector.
+	Have to revolutionize everything. Rename Expression to
+	BasicExpression and typedef Pointer<BasicExpression> Expression;
+	Before attempting such a big change, I am going to check everything
+	in.
+
+010722	fixed the IMMENSE mistake - architecture has changed, though.
+	Have to update the document (article).
+	1. public methods for constructions are OUTSIDE of classes
+	2. they are: operator+,-,*,/,^,Log,Exp,Sin,Cos,Tan,Sinh,...,Sqrt
+	3. they all work by changing the arguments, so in case you
+	   don't want it changed, use things like 
+		Expression e = f.Copy() + g.Copy();
+	   instead of
+		Expression e = f + g;
+	4. Parser uses linking (referencing), not copying. Realized
+	   it makes more sense because the "bricks" left around would
+	   be deleted anyway.
+
+010722	Diff seems to be working. Needs more testing though. Can
+	probably finish off the article now.
+
+010723	Put some simplification in place.
+
+010723	example TrigSimp is working
+
+021122	Added stuff for use with MORON
+
+021209	CHECK IN --- first in the MORON usage
+
+021218	Should write a little command-line routine that simplifies
+	and diffs equations - so that I can test everything.
+
+021218	There should be a routine implementing "distribute sum over products":
+	it is convenient for subsequent convexifications (besides,
+	cases like 2(x + y + z) should really be transformed into
+	2x + 2y + 2z for linearity's sake).
+
+021218	Now the parser automatically allocates varindices if it
+	is not initialized manually.
+
+021218	CHECK IN
+
+021219	Problems in:
+	- simplification of fractions;
+	- y+x-0.5*y-x-0.5*y SIGSEGVs on Expression zero(0.0): fishy
+
+021220	FISHY PROBLEM IN 021219 SOLVED EASILY!!! It's the first time
+	I manage to dispose of a nasty, random, tree-related SIGSEGV
+	so effectively. Valgrind helped me ascribe the bug to a
+	--(*ncount) in tree.cxx where ncount was not allocated: and
+	since ncount only appears in the short tree.cxx file, it was
+	then easy to insert a ncount = NULL all the time where
+	I'd forgotten it. Et voila`.
+
+021220	simplification of fractions now works OK
+
+021220	noticed Diff misses cases COT, SINH, COSH, TANH, COTH, SQRT
+
+021220	CHECK IN
+
+030106	GetLinearInfo() and GetNonlinearPart() separate the linear
+	and nonlinear parts of an expression. However, watch out!
+	In an expression like x+y+y^2 the linear part is defined
+	as x and the nonlinear as y+y^2. This is against the mathematical
+	common sense (which would require x+y as linear and y^2 as
+	nonlinear part) but it makes it easier to Moron to interface
+	to most NLP local solvers.
+
+030114	Working on Interval()
+
+030115	Have to do powermkrange() properly, and fill in the missing
+	gaps in Interval() (hyperbolic functions)
+
+030116	changed operators so that they never modify their arguments.
+	Now, the parser relies on the old model, with modification
+	of arguments. Therefore: take all the old operators,
+	rename them suitably, and change the parser to use the old
+	model operators.
+
+030116	The behaviours of operator+, operator-, operator*, ...
+	and SumLink, DifferenceLink, ProductLink, ... is similar
+	yet very different. The fact that the "Link" version of
+	the call changes the arguments and minimizes the number of
+	created subnodes makes it very useful to create expressions
+	from scratch (as in the parser), where the constituent nodes
+	do not have an independent life. When creating a new
+	constraint from an existing one - and the existing one has, 
+	as it were, a life of its own, then the "operator" version
+	of the calls should be used. I have also observed that
+	the stack does not handle temporary Expression entities
+	graciously; thus, a C++ instruction like
+		do_something(a + b / c);
+	where a,b,c are Expressions, might fail or give unexpected
+	results. Use with care, always test first. If in doubt do
+	one step at a time:
+		Expression t1 = a + b;
+		Expression t2 = t1 / c;
+		do_something(t2);
+	Things like 
+		Expression e = something;
+		Expression f = something_else;
+		e = e + f;
+	might not work. Use SumLink() instead, as in e = SumLink(e, f).
+
+030117	Added "AddCopyOfNode()" to tree.cxx, for use in the 
+	operator+,*,... (i.e. in the non -Link version of the
+	construction methods).
+
+030117	Changing expression.h:LARGE from 1e10 to 1e30 has the
+	effect of unearthing a strange SIGSEGV in DiffNoSimplify()
+	due to an exceptions there being no nodes, called from
+	expression.cxx:3386. Why?
+
+030117	CHECK IN
+
+030121	Bugfix to go with the convexification routines
+
+030121	Big bugfix to IsSmithStandard (now depends on
+	constraint bounds as well)
+
+030121	CHECK IN
+
+030122	Ported to GCC 3.2 (stringstream instead of strstream
+	and things like that. Ah: stringstream doesn't like
+	<< ends).
+
+030914	Can now compile with both GCC < 3 and >= 3
+
+030925	Now simplifies (var)^(const) in var with a constant
+	exponent (SimplifyRecursive)
+
+030925	Remember that there are WARNINGs scattered around, mostly
+	pertaining to sections not finished yet (and hence a great source 
+	of bugs) - case in point is expression.cxx:powermkrange()
+
+031007	removal of nasty bug - ret->GetSize() == 1 in operator/
+	simplifications had become t->GetSize() == 1. Catastrophic.
+	removal of nasty bug - working on ret2 and then returning ret.
+	even more catastrophic.
+
+031008	CHECK IN
+
+031226	moron/problem_files/costastest.ev3 has helped uncovering
+	a symbolic bug (when adding a + sum we take terms of sum
+	and add them one by one to a; we were forgetting to multiply
+	by sum's operator-wide numerical coefficient).
+
+031226	CHECK IN
+
+040109	Eval() can now take a variable indices map argument.
+
+040110	mis-differentiation: d(-x1^2 -x2^2 - x3^2 - x1*x2)/d(x1)=
+	(-2*x1)+(x2) instead of (-2*x1)-(x2). Now fixed.
+
+050326	corrected small bug in passing variable name when
+	finding linear structure
+
+050327	CHECK IN	
+
+050509	By running SNOPT with evaluation performed with Ev3 found
+	out terrifying memory leak and very slow performance indeed
+	(possibly due to memory leak?). Find the bastard bug and fix
+	it (for the memleak). For the slow performance, it's somewhat
+	surprising after the computational tests with n-ary trees, 
+	but it might nonetheless be the C++ stdlib structure with
+	template pointer class to a template tree of basicexpressions,
+	which might be overkill. In this case, it would be worth
+	thinking about fixing pure C n-ary trees (very fast) with
+	no memory handling AFTER having simplified all expressions.
+
+050906	Added "FastEval" methods with a pure-C n-ary tree copied from
+	the Eval2 paper code. Leaks in Moron2 still there...
+
+050906	The leaks found in moron2 reside in bad de-allocation of temporary
+	Pointer<BasicExpression> objects, so they have something to do with
+	Ev3. Managed with some tricks to put all the leaks in pre- and post-
+	processing, away from iterative calls; couldn't do away with 
+	everything, though. Specifically, AddCut adds expressions to the 
+	problem so it's susceptible to leaks and is used in the iterative
+	part of the Tabu Search. Idea for Ev4: keep it SIMPLER than Ev3.
+	Maybe make it a little bit more difficult to perform symbolic
+	manipulation, but leaks must be avoided at all costs
+
+050921	working on dependencies in fastevaltrees
+
+060721	fixed an important bug in SimplifyRecursive() - a 
+	congregated coefficient from SUM was being used for three
+	different purposes - now split into three separate coefficients
+
+080125	working on IsEqualBySchema/IsEqualByOperator/
+        ReplaceBySchema/ReplaceByOperator to prepare for convexification
+
+080126	Smith's standardization procedure starting to work.
+
+080127	Since standardization not independent of ordering, might
+	have to put in a primitive SmithStandardForm (in BasicExpression)
+	to deal with each operator in just one function
+
+080128	coded SmithStandardForm (recursive function). Needs to deal with
+	binary products instead of n-ary
+
+080225	apparently SmithStandardForm works (n-ary products with n>2 are dealt
+	with separately in order to reformulate them as binary products)
+
+080228	warning: SetVarIndex(), SetVarName() set opname to VAR, SetValue()
+	sets it to CONST
+
+080928	split up expression.cxx in several smaller header/implementation
+	files
+
+080928	tree.h and tree.cxx exist but cannot really be used because of
+	linking problems with class templates. Use tree_hi.cxx 
+	as an include file instead. This will mean that its methods 
+	will be inlined but it's the most painless solution
+

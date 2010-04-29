@@ -1,0 +1,6 @@
+UNDER GNU/LINUX
+      make
+
+UNDER WINDOWS
+      install GNU/LINUX, then make
+

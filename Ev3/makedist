@@ -1,0 +1,32 @@
+#!/bin/sh
+NAME=Ev3
+if [ -d dist ] ; then
+  echo "$0: directory \"dist\" already exists, remove it first"
+  exit 1
+fi
+
+if [ ! -f DISTFILES ] ; then
+  echo "$0: file DISTFILES not found"
+  exit 2
+fi
+
+# create dist directory
+mkdir dist
+for i in `cat DISTFILES` ; do
+  cp -L $i dist/
+done
+cp Makefile.dist dist/Makefile
+cp -dprv examples/ dist/
+
+# create .tar.gz
+if [ -f VERSION ] ; then
+  V=`cat VERSION`
+  mv dist $NAME-${V}
+  tar zcvf $NAME-${V}.tar.gz $NAME-${V}
+  mv $NAME-${V} dist
+else
+  mv dist $NAME
+  tar zcvf $NAME.tar.gz $NAME
+  mv $NAME dist
+fi
+rm -rf dist

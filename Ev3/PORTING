@@ -1,0 +1,19 @@
+The architecture of Ev3, based on recursive template inheritance, makes
+it a hard test for C++ compiler; thus porting is limited to extremely
+good compilers.
+
+gcc 2.95.2				... native development, OK
+gcc 2.7.2.3				... compiles OK(1)
+Borland C++ compiler for i386 5.2	... won't compile tree.cxx:90
+Sun C++ compiler for sparc 5.0		... won't compile tree.cxx:90
+MS VC++ 4.0				... won't compile (broken STL)
+MS VC++ 6.0				... compiles and runs OK
+
+--- Notes ---
+(1): Ev3 will compile seamlessly with gcc 2.7.2.3 but a segmentation
+fault will occur in the parser, as a bug either in the compiler or in
+the accompanying (on Debian slink) std c++ library prevents input->get() 
+to successfully return 0 on occurrence of EOF - it raises a segmentation 
+fault instead. Other uses of Ev3 (apart from the built-in parser, that is) 
+are possible. 
+

@@ -1,0 +1,19 @@
+# Microsoft Developer Studio Generated Dependency File, included by Ev3.mak
+
+"\liberti\phd\expression\v3\examplemain.cxx" : \
+	"..\exceptions.h"\
+	"..\expression.h"\
+	"..\tree.cxx"\
+	
+
+"\liberti\phd\expression\v3\expression.cxx" : \
+	"..\exceptions.h"\
+	"..\expression.h"\
+	"..\tree.cxx"\
+	
+
+"\liberti\phd\expression\v3\parser.cxx" : \
+	"..\exceptions.h"\
+	"..\expression.h"\
+	"..\tree.cxx"\
+	

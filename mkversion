@@ -1,0 +1,2 @@
+#!/bin/sh
+echo "#define ROSEBUILDDATE \""`date "+%y%m%d-%H%M"`"\"" > version.h

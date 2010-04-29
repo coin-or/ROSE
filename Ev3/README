@@ -1,0 +1,10 @@
+Expression v3
+-------------
+
+# RCS3 "$Id: README,v 1.4 2003/10/08 11:13:54 liberti Exp liberti $"
+
+This is a C++ object-oriented library for symbolic expression manipulation. 
+
+Its pointer/tree subclass (see tree.cxx) can be used for any purpose
+where there is an n-ary tree involved.
+

@@ -1,0 +1,1 @@
+#define ROSESOLVERLIST "gomory limitedbranch localbranch Rcdd Rconvexifier Rconvexifiermod Rcopy Rdisaggr Roa Rporta Rprintdat Rprint Rprintmod Rprintncvxdiscr Rprodbincont RQuarticConvex Rrelaxation Rsmith Rsymmgroup Rvinci sbb subgradient tabu vns "

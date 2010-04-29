@@ -1,0 +1,30 @@
+# Features of Expression v3 system:
+
+# RCS11 "$Id: FEATURES,v 1.6 2003/10/08 11:14:00 liberti Exp liberti $"
+
+1) operators act on *this
+2) n-ary trees
+3) coefficient applies to every kind of operator/operand
+4) exponent only applies to leaves
+5) solid architecture and hierarchical structure
+6) [run efficiency tests against maple]
+7) could implement "grey box" functions for conditional functions
+   where the conditions only depends on the value of the function args,
+   e.g. f(x) = sin(x) if x < 0, x^2 if x >= 0
+
+- Standard ordering for an expression (see expression.cxx:NodeOrder()) is:
+  constants + variables + variables^{powers in rising order} + operators
+
+- POWER is used when the base or exponent are expressions; otherwise 
+  the Set/GetExponent mechanisms are used.
+
+- Creating expression is done either by making new nodes out of
+  each new created expression (operator+, operator-, operator*,
+  operator/, operator^, Log, Exp, Sin, Cos,...) or linking the
+  old nodes to the new one (SumLink, DifferenceLink, ProductLink,
+  FractionLink, PowerLink, LogLink, ExpLin, SinLink, CosLink, ...).
+
+- When you change the -Link versions, also remember to change the
+  non-Link, and vice versa.
+
+- varindex should always start from 1

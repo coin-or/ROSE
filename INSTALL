@@ -1,6 +1,6 @@
-UNDER GNU/LINUX
-      make
+UNDER GNU/LINUX : 
+      Run "make"command in the Rose directory.
 
-UNDER WINDOWS
-      install GNU/LINUX, then make
+UNDER WINDOWS :
+      Install GNU/LINUX, then see above.
 

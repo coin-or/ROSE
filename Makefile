@@ -61,7 +61,6 @@ $(EV3LIB): Ev3/
 
 $(AMPLLIB):
 	./get.ASL
-	cd amplsolver/ ; ./configurehere
 	$(MAKE) -C amplsolver
 	mv -fv amplsolver/amplsolver.a external/libamplsolver.a
 

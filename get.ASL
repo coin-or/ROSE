@@ -39,9 +39,13 @@ cd ..
 echo "Deleting the tar file..."
 rm solvers.tar
 
+
 mv solvers amplsolver
-chmod +x amplsolver/configure
-chmod +x amplsolver/configurehere
+cd amplsolver/
+chmod +x configure
+chmod +x configurehere
+./configurehere
+sed -i "s/^CFLAGS\ =\ -DNo_dtoa\ -O$/CFLAGS\ =\ -O/" makefile
 
 echo " "
 echo "Done downloading the source code for ASL."

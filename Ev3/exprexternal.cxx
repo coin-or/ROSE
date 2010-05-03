@@ -1935,7 +1935,7 @@ Expression DiffNoSimplify(const Expression& ac, Int vi) {
 				HELPURL);
 	}
 	ret = Diff(a->GetNode(0), vi);  // f'
-	ret = ret * a.Copy();  // f' e^f
+	ret = ret * Exp(a->GetNode(0));  // f' e^f
 	break;
       case SIN:
 	if (sz != 1) {

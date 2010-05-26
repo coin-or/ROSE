@@ -1,6 +1,10 @@
+ROSE INSTALLATION INSTRUCTIONS
+
 UNDER GNU/LINUX : 
-      Run "make"command in the Rose directory.
+
+Uncompress the ROSE archive; then "cd rose; make"
 
 UNDER WINDOWS :
-      Install GNU/LINUX, then see above.
+      
+Untested. Believed to be working under CYGWIN
 

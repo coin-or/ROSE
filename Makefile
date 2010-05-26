@@ -8,8 +8,8 @@
 CXX		= c++
 #CXXFLAGS      = -g -DDEBUG -pg -DPROFILER
 #CXXFLAGS      = -g -DDEBUG -DMEMDEBUG -DVERBOSEDEBUG 
-#CXXFLAGS	 = -g 
-CXXFLAGS	 = -O2 
+CXXFLAGS	 = -g 
+#CXXFLAGS	 = -O2 
 CC		= cc
 CFLAGS		= $(CXXFLAGS)
 #FC		= gfortran
@@ -31,13 +31,15 @@ OBJS		= problem.o utils.o solver.o newsolver.o \
                   solver_Rconvexifier.o solver_RQuarticConvex.o \
                   solver_Rprintdat.o solver_Rcdd.o \
 		  solver_Rrelaxation.o solver_subgradient.o \
-                  solver_Rconvexifiermod.o solver_Rprintncvxdiscr.o
+                  solver_Rconvexifiermod.o solver_Rprintncvxdiscr.o \
+                  solver_Rfbbtfp.o solver_null.o
 MAIN		= rose.o
 EXE		= rose
 LIBS		= $(OBJS) $(EV3LIB)
 CXXFLAGS        += -DGLPK48
 INCLUDES	= -Iinclude -Iamplsolver
 #FORTRANLIB      = -lgfortran
+SQC		= external/solver_RQuarticConvex.o
 
 all:	writeversion dir $(AMPLLIB) $(EV3LIB) \
         $(OBJS) $(MAIN) cleanexe\
@@ -87,6 +89,9 @@ distclean: clean Ev3clean libf2cclean
 	$(RM) -f *~ core* redcongraph.dot
 	$(RM) -rf amplsolver/
 	$(RM) -rf external/
+
+solver_RQuarticConvex.o: solver_RQuarticConvex.cxx solver_RQuarticConvex.h
+	test -f $(SQC) && cp $(SQC) $@ || $(CXX) -c $(CXXFLAGS) $(INCLUDES) -o %@ $<
 
 %.o:    %.cxx %.h
 	$(CXX) -c $(CXXFLAGS) $(INCLUDES) -o $@ $<

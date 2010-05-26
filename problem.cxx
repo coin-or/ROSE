@@ -1696,7 +1696,8 @@ Ampl::ASL* Problem::ParseAMPL(char** argv, int argc) {
   case 24: mainsolvername = "subgradient"; break;
   case 25: mainsolvername = "rconvexifiermod"; break;
   case 26: mainsolvername = "rprintncvxdiscrepancy"; break;
-  default: mainsolvername = "vns"; break;
+  case 27: mainsolvername = "rfbbtfp"; break;
+  default: mainsolvername = "print"; break;
   }
   ParameterBlob.SetStringParameter("MainSolver", mainsolvername);
   // quiet
@@ -1742,6 +1743,8 @@ Ampl::ASL* Problem::ParseAMPL(char** argv, int argc) {
   }
   // Rsymmgroup parameters
   ParameterBlob.SetIntParameter("SymmgroupOutType", *Ampl::TheSymmgroupOutType);
+  // Rfbbtfp parameters
+  // ...
   // vns parameters
   ParameterBlob.SetDoubleParameter("VNSEpsilon", *Ampl::TheVNSEpsilon);
   ParameterBlob.SetIntParameter("VNSKmax", *Ampl::TheVNSKmax);
@@ -2227,13 +2230,13 @@ void Problem::Simplifier(bool theamplflag) {
 		// situation is c1*v1 - c2*v2 = 0, i.e. v2=(c1/c2)v1
 		if (v1 == v2) {
 		  if (c1 != -c2) {
-		    std::cerr << "rose::Simplify: constraint (" << c1 << ")*"
-			 << "var - (" << c2 << ")*var = 0 infeasible\n";
-		    assert(c1 == -c2);
+		    // only solution has x_v1 = 0
+		    // TODO100524: search and replace x_v1 by 0 throughout
+		  } else {
+		    // constraint is 0 < x - x < 0, just delete it
+		    IsConstrDeleted[i] = true;
+		    ischanged = true;
 		  }
-		  // constraint is 0 < x - x < 0, just delete it
-		  IsConstrDeleted[i] = true;
-		  ischanged = true;
 		} else {
 		  // constraint is a potential candidate, check that
 		  // at least one var is not immutable

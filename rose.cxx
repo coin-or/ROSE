@@ -161,12 +161,12 @@ extern "C" int moncontrol(int mode);
 
 void Help(bool amplflag) {
   using namespace std;
-  cout << "ROSE (Reformulation/Optimization Software Engine) - (c) L.Liberti 2005-2009"
+  cout << "ROSE (Reformulation/Optimization Software Engine) - (c) L. Liberti 2005-2010" << endl
   #ifdef ROSEVERSION
-       <<", version " << STRINGIFY(ROSEVERSION)
+       <<"     version " << STRINGIFY(ROSEVERSION)
   #endif
   #ifdef ROSEBUILDDATE
-       <<", build " << ROSEBUILDDATE
+       <<"     build " << ROSEBUILDDATE
   #endif
          << endl;
   if (amplflag) {
@@ -177,7 +177,7 @@ void Help(bool amplflag) {
     cout << "AMPL solver options (use \"option roseamp_options\" "
 	 << "AMPL directive)" << endl;
     cout << "  convexifieroutampl (0=no, 1=yes)" << endl;
-    cout << "  glpksolutionmethod (0=simplex, 1=interior)" << endl;
+    //    cout << "  glpksolutionmethod (0=simplex, 1=interior)" << endl;
     cout << "  limitedbrancharbitrary (double in [0,1])" << endl;
     cout << "  limitedbranchlocalsolver (solver code)" << endl;
     cout << "  limitedbranchmaxtime (in seconds)" << endl;
@@ -186,8 +186,8 @@ void Help(bool amplflag) {
     cout << "  nosimplifier (0 or 1)" << endl;
     cout << "  quiet (0 or 1)" << endl;
     cout << "  relaxinteger (0 or 1)" << endl;
-    cout << "  snopt6majoriterations (number of iterations)" << endl;
-    cout << "  snopt6minoriterations (number of iterations)" << endl;
+    //    cout << "  snopt6majoriterations (number of iterations)" << endl;
+    //    cout << "  snopt6minoriterations (number of iterations)" << endl;
     cout << "  symmgroupouttype (0=nauty[default], 1=AMPL .dat)" << endl;
     cout << "  vnsepsilon (double)" << endl;
     cout << "  vnskmax (max VNS neighbourhood size (int))" << endl;
@@ -198,22 +198,34 @@ void Help(bool amplflag) {
 	 << endl;
     cout << "  vnswarmup (0 or 1)" << endl;
     cout << "where the solver code is an integer defined as follows:" << endl;
-    cout << "  0:snopt, 1:tabu(letsgo), 2:glpk, 3:vns, 4:gomory, " << endl;
-    cout << "  5:limitedbranch, 6:localbranch, 7:analyser, 8:prodbincont"
-	 << endl;
-    cout << "  9:print, 10:smith, 11:copy, 12:disaggr, 13:oa, 14:symmgroup, 15: printmod"
-	 << endl;
-    cout << "  16:ipopt" << endl;
-    cout << "  17:rvinci" << endl;
-    cout << "  18:rporta" << endl;
-    cout << "  19:rquarticconvex" << endl;
-    cout << "  20:rconvexifier" << endl;
-    cout << "  21:rprintdat" << endl;
-    cout << "  22:rcdd" << endl;
-    cout << "  23:rrelaxation" << endl;
-    cout << "  24:subgradient" << endl;
-    cout << "  25:rconvexifiermod" << endl;
-    cout << "  26:rprintncvxdiscrepancy" << endl;
+    // cout << "   0: snopt" << endl;
+    cout << "   1: tabu(letsgo)" << endl;
+    // cout << "   2: glpk" << endl;
+    cout << "   3: vns" << endl;
+    cout << "   4: gomory" << endl;
+    cout << "   5: limitedbranch" << endl;
+    cout << "   6: localbranch" << endl;
+    cout << "   7: analyser" << endl;
+    cout << "   8: prodbincont" << endl;
+    cout << "   9: print" << endl;
+    cout << "  10: smith" << endl;
+    cout << "  11: copy" << endl;
+    cout << "  12: disaggr" << endl;
+    cout << "  13: oa" << endl;
+    cout << "  14: symmgroup" << endl;
+    cout << "  15: printmod" << endl;
+    // cout << "  16: ipopt" << endl;
+    cout << "  17: rvinci" << endl;
+    cout << "  18: rporta" << endl;
+    cout << "  19: rquarticconvex" << endl;
+    cout << "  20: rconvexifier" << endl;
+    cout << "  21: rprintdat" << endl;
+    cout << "  22: rcdd" << endl;
+    cout << "  23: rrelaxation" << endl;
+    cout << "  24: subgradient" << endl;
+    cout << "  25: rconvexifiermod" << endl;
+    cout << "  26: rprintncvxdiscrepancy" << endl;
+    cout << "  27: rfbbtfp" << endl;
   } else {
     cout << "Syntax: rose [options] file\n";
     cout << "  where file specifies the optimization problems (.ros format),\n";

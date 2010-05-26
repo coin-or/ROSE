@@ -32,7 +32,7 @@ PrintmodSolver::PrintmodSolver() {
   ManualOptDir = false;
   OptimalObjVal = ROSEINFINITY;
   Epsilon = EPSILON;
-  LocalSolverName = "snopt";
+  LocalSolverName = "null";
   MaxRunningTime = 0;
   OutFile = "Rprintmod_out.mod";
 }

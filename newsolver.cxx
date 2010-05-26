@@ -14,6 +14,9 @@
 #include "newsolver.h"
 
 // list of included solvers
+// #include "solver_snopt6.h"
+// #include "solver_ipopt.h"
+// #include "solver_glpk.h"
 #include "solver_tabu.h"
 #include "solver_vns.h"
 #include "solver_gomory.h"
@@ -35,26 +38,44 @@
 #include "solver_Rconvexifiermod.h"
 #include "solver_Rprintdat.h"
 #include "solver_Rcdd.h"
-// LEO081115: ain't ready yet
 //#include "solver_sbb.h"
 #include "solver_Rrelaxation.h"
 #include "solver_subgradient.h"
 #include "solver_Rprintncvxdiscr.h"
+#include "solver_Rfbbtfp.h"
+#include "solver_null.h"
 
 // add new solver header files here
 
 Solver* NewSolver(std::string solvername) {
   Solver* ret = NULL;
-
-  if (solvername == "snopt6" || solvername == "snopt" ||
-      solvername == "SNOPT6" || solvername == "SNOPT" ||
-      solvername == "Snopt6" || solvername == "Snopt") {
+  
+  if (solvername == "null" || solvername == "NULL") {
+    solvername = "null";
+    ret = new NullSolver;
+  } else if (solvername == "snopt6" || solvername == "snopt" ||
+	     solvername == "SNOPT6" || solvername == "SNOPT" ||
+	     solvername == "Snopt6" || solvername == "Snopt") {
     solvername = "snopt6";
 #ifdef HAS_SNOPT
     ret = new Snopt6Solver;
 #else
     cout << "Snopt disabled\n" << endl;
-#endif
+#endif 
+
+    /*
+  } else if (solvername == "glpk" || solvername == "GLPK") {
+    solvername = "glpk";
+    ret = new GLPKSolver;
+    */
+
+    /*
+  } else if (solvername == "ipopt" || solvername == "Ipopt" ||
+             solvername == "IpOpt" || solvername == "IPOPT") {
+    solvername = "ipopt";
+    ret = new IpoptSolver;
+    */
+
   } else if (solvername == "Tabu" || solvername == "tabu" ||
 	     solvername == "letsgo" || solvername == "LETSGO") {
     solvername = "tabu";
@@ -134,9 +155,13 @@ Solver* NewSolver(std::string solvername) {
 	     solvername == "Rcdd" || solvername == "CDD") {
     solvername = "rcdd";
     ret = new RcddSolver;
-    /*  } else if (solvername == "sbb" || solvername == "sBB") {
+
+    /*
+  } else if (solvername == "sbb" || solvername == "sBB") {
     solvername = "sbb";
-    ret = new SbbSolver; */
+    ret = new SbbSolver; 
+    */
+
   } else if (solvername == "rrelaxation" || solvername == "Relaxation" ||
 	     solvername == "Rrelaxation" || solvername == "RELAXATION") {
     solvername = "rrelaxation";
@@ -149,6 +174,10 @@ Solver* NewSolver(std::string solvername) {
 	     solvername == "Rprintncvxdiscrepancy" || solvername == "PRINTNCVXDISCREPANCY") {
     solvername = "rprintncvxdiscrepancy";
     ret = new RprintncvxdiscrSolver;
+  } else if (solvername == "fbbtfp" || solvername == "rfbbtfp" ||
+	     solvername == "Rfbbtfp" || solvername == "RFBBTFP") {
+    solvername = "rfbbtfp";
+    ret = new RfbbtfpSolver;
   }
 
 
@@ -167,6 +196,17 @@ void DeleteSolver(Solver* s) {
     if (solvername == "snopt6") {
       // LEO081115: why is the following line commented?
       //delete dynamic_cast<Snopt6Solver*>(s);
+
+      /*
+    } else if (solvername == "glpk") {
+      delete dynamic_cast<GLPKSolver*>(s);
+      */
+
+      /*
+    } else if (solvername == "ipopt") {
+      delete dynamic_cast<IpoptSolver*>(s);
+      */
+
     } else if (solvername == "tabu") {
       delete dynamic_cast<TabuSolver*>(s);
     } else if (solvername == "vns") {
@@ -209,8 +249,12 @@ void DeleteSolver(Solver* s) {
       delete dynamic_cast<RprintdatSolver*>(s);
     } else if (solvername == "rcdd") {
       delete dynamic_cast<RcddSolver*>(s);
-      /*    } else if (solvername == "sbb") {
-	    delete dynamic_cast<SbbSolver*>(s); */
+
+      /*
+    } else if (solvername == "sbb") {
+	    delete dynamic_cast<SbbSolver*>(s); 
+      */
+
     } else if (solvername == "rrelaxation") {
       delete dynamic_cast<RrelaxationSolver*>(s);
     } else if (solvername == "subgradient") {

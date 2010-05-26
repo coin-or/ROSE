@@ -34,7 +34,7 @@ RvinciSolver::RvinciSolver() {
   ManualOptDir = false;
   OptimalObjVal = ROSEINFINITY;
   Epsilon = EPSILON;
-  LocalSolverName = "snopt6";
+  LocalSolverName = "null";
   MaxRunningTime = 0;
   //OutFile = "Rvinci_out.ine";
 }

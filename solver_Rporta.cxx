@@ -36,7 +36,7 @@ RportaSolver::RportaSolver() {
   ManualOptDir = false;
   OptimalObjVal = ROSEINFINITY;
   Epsilon = EPSILON;
-  LocalSolverName = "snopt6";
+  LocalSolverName = "null";
   MaxRunningTime = 0;
   //OutFile = "Rporta.ieq";
 }

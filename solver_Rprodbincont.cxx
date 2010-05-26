@@ -34,7 +34,7 @@ ProdBinContSolver::ProdBinContSolver() {
   ManualOptDir = false;
   OptimalObjVal = ROSEINFINITY;
   Epsilon = EPSILON;
-  LocalSolverName = "snopt";
+  LocalSolverName = "null";
   MaxRunningTime = 0;
 }
 
@@ -99,10 +99,12 @@ void ProdBinContSolver::Initialize(bool force = false) {
     integrality.push_back(InProb->GetVariableLI(i)->IsIntegral);
   }
 
+  /*
   // create and configure local solver
   LocalSolver = NewSolver(LocalSolverName);
   LocalSolver->SetProblem(InProb);
   LocalSolver->ReplaceParams(ParameterBlob);
+  */
 
   // current, best solution, bounds
   for(int i = 0; i < NumberOfVariables; i++) {

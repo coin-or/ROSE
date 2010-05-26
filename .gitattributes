@@ -90,6 +90,8 @@ Ev3/try/vecdelete.cxx -text
 /solver_Rcopy.h -text
 /solver_Rdisaggr.cxx -text
 /solver_Rdisaggr.h -text
+/solver_Rfbbtfp.cxx -text
+/solver_Rfbbtfp.h -text
 /solver_Roa.cxx -text
 /solver_Roa.h -text
 /solver_Rporta.cxx -text
@@ -122,6 +124,8 @@ Ev3/try/vecdelete.cxx -text
 /solver_limitedbranch.h -text
 /solver_localbranch.cxx -text
 /solver_localbranch.h -text
+/solver_null.cxx -text
+/solver_null.h -text
 /solver_sbb.cxx -text
 /solver_sbb.h -text
 /solver_subgradient.cxx -text

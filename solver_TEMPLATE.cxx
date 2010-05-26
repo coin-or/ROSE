@@ -33,7 +33,7 @@ TEMPLATESolver::TEMPLATESolver() {
   ManualOptDir = false;
   OptimalObjVal = ROSEINFINITY;
   Epsilon = EPSILON;
-  LocalSolverName = "snopt";
+  LocalSolverName = "null";
   MaxRunningTime = 0;
 }
 
@@ -49,7 +49,7 @@ bool TEMPLATESolver::CanSolve(int problemtype) {
   // fill in here with information about solver capabilities
 }
 
-void TEMPLATESolver::Initialize(bool force) {
+void TEMPLATESolver::Initialize(bool force = false) {
 
   if (InitProb) {
     ;
@@ -98,10 +98,12 @@ void TEMPLATESolver::Initialize(bool force) {
     integrality.push_back(InProb->GetVariableLI(i)->IsIntegral);
   }
 
+  /* ACTIVATE IN CASE OF A COMPLEX SOLVER WITH SUBSOLVER(s)
   // create and configure local solver
   LocalSolver = NewSolver(LocalSolverName);
   LocalSolver->SetProblem(InProb);
   LocalSolver->ReplaceParams(ParameterBlob);
+  */
 
   // current, best solution, bounds
   for(int i = 0; i < NumberOfVariables; i++) {

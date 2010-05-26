@@ -1,1 +1,78 @@
-!! to do !!
+                               ROSE
+                               ----
+
+
+INTRODUCTION
+
+The ROSE (Reformulation/Optimization Software Engine) is a software
+for performing symbolic reformulations to Mathematical Programs
+(MP). MPs are formal representations of optimization problems, and
+reformulations could be defined as rewriting systems taking MPs to
+other MPs which also conserve some property, such as e.g. the set of
+optima. 
+
+The ROSE is usually used as an AMPL solver, and is itself a collection
+of sub-solvers (most of which perform either some symbolic
+reformulation or analysis task). Once a model (with data) has been
+loaded into the AMPL workspace, the user types
+
+  option solver roseamp;
+  option roseamp_options "mainsolver=N [other options]";
+  solve;
+
+to call ROSE. ROSE's subsolvers are selected through an ordinal
+N. Typing "roseamp" from the shell command line will list the
+subsolvers that have built in the locally installed systems.
+
+Originally, we distributed a ROSE system with many numerical solvers
+as well as symbolic reformulators. We eventually made the decision of
+limiting ROSE to what it does best - reformulations only. Thus, you
+might find some options which refer to solvers that have are not
+actually present (sorry).
+
+MPs can be classified in two types: flat and structured. Flat MPs are
+those whose constraints are not indexed and whose variables consist of
+one symbol only, indexed by a scalar. Numerical solvers usually
+require flat MPs as input. Structured MPs allow variables and
+constraints to be quantified over complicated set structures. AMPL
+itself takes structured MPs as input. AMPL, however, does not allow
+solvers either to access the structured MP or to change the MP
+internally. Thus, ROSE's action is usually limited to reading a flat
+MP and outputting a text-formatted version of the (reformulated) flat
+MP. 
+
+ROSE uses the Ev3 library (developed by the same team and distributed
+according to the same license as ROSE) in order to store and
+reformulate mathematical expressions occurring in MPs. Expressions are
+represented as n-ary trees, where leaf nodes correspond to variables
+and constants (0-ary operators) and non-leaf nodes with n subnodes
+correspond to n-ary operators. An arc (u,v) occurs in an expression
+tree if v is an argument of the operator u. See Ev3/ for more details.
+
+SOLVERS
+
+[List of solvers and how to use them]
+
+
+LICENSE
+
+The ROSE is licensed under the Common Public License (CPL). 
+
+
+DEVELOPER'S NOTES
+
+To access the source code, type:
+
+svn checkout svn+ssh://hammer.lix.polytechnique.fr/home/savourey/svnrepository/rose
+
+Procedure to create a new solver:
+
+1. cp and edit solver_TEMPLATE.cxx/.h to new solver name (search/replace)
+2. Makefile: add new object to OBJS
+3. newsolver.cxx (add new solver / delete new solver / include .h)
+4. problem.cxx (add solvername/params in the ampl interface)
+5. rose.cxx (add help)
+
+
+REFERENCES
+

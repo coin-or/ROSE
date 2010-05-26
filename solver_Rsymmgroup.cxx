@@ -39,7 +39,7 @@ SymmgroupSolver::SymmgroupSolver() {
   ManualOptDir = false;
   OptimalObjVal = ROSEINFINITY;
   Epsilon = EPSILON;
-  LocalSolverName = "snopt";
+  LocalSolverName = "null";
   MaxRunningTime = 0;
   OutType = 0; // 0=nauty, 1=ampl
 }
@@ -117,11 +117,13 @@ void SymmgroupSolver::Initialize(bool force = false) {
   for(int i = 1; i <= NumberOfVariables; i++) {
     integrality.push_back(InProb->GetVariableLI(i)->IsIntegral);
   }
-
+  
+  /*
   // create and configure local solver
   LocalSolver = NewSolver(LocalSolverName);
   LocalSolver->SetProblem(InProb);
   LocalSolver->ReplaceParams(ParameterBlob);
+  */
 
   // current, best solution, bounds
   for(int i = 0; i < NumberOfVariables; i++) {

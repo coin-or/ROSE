@@ -36,8 +36,8 @@ OBJS		= problem.o utils.o solver.o newsolver.o \
 MAIN		= rose.o
 EXE		= rose
 LIBS		= $(OBJS) $(EV3LIB)
-CXXFLAGS        += -DGLPK48
-INCLUDES	= -Iinclude -Iamplsolver
+#CXXFLAGS        += -DGLPK48
+INCLUDES	= -Iamplsolver
 #FORTRANLIB      = -lgfortran
 SQC		= external/solver_RQuarticConvex.o
 
@@ -91,7 +91,7 @@ distclean: clean Ev3clean libf2cclean
 	$(RM) -rf external/
 
 solver_RQuarticConvex.o: solver_RQuarticConvex.cxx solver_RQuarticConvex.h
-	test -f $(SQC) && cp $(SQC) $@ || $(CXX) -c $(CXXFLAGS) $(INCLUDES) -o %@ $<
+	test -f $(SQC) && cp $(SQC) $@ || $(CXX) -c $(CXXFLAGS) $(INCLUDES) -o $@ $<
 
 %.o:    %.cxx %.h
 	$(CXX) -c $(CXXFLAGS) $(INCLUDES) -o $@ $<

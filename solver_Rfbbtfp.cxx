@@ -412,6 +412,8 @@ int RfbbtfpSolver::Solve(bool reinitialize) {
   ttot2 = getcputime(tend);
   tpartial = tend[0] - tstart[0];
   out << "# sum of all variable intervals = " << totalsum << endl;
+  out << "# final discrepancy (termination when <= " << Epsilon << ") = "
+      << fbbt_discrepancy << endl;
   out << "# Total CPU time = " << ttot2 << ", user CPU time = " << tpartial
        << endl;
   out << "###################################################" << endl;

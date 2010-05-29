@@ -15,7 +15,7 @@ mkdir dist
 for i in `cat DISTFILES` ; do
   cp -L $i dist/
 done
-cp Makefile.dist dist/Makefile
+cp Makefile dist/Makefile
 cp -dprv examples/ dist/
 
 # create .tar.gz

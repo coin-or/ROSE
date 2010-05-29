@@ -19,3 +19,5 @@ fastexpression.cxx
 operand.cxx
 exprexternal.cxx
 main.cxx
+smithmain.cxx
+convexifiermain.cxx

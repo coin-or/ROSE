@@ -51,8 +51,60 @@ tree if v is an argument of the operator u. See Ev3/ for more details.
 
 SOLVERS
 
-[List of solvers and how to use them]
+ROSE consists of a collection of (numerical) solvers and
+reformulators. Most reformulator names are prefixed by a capital
+letter 'R'. Solvers solve a problem numerically; reformulators operate
+on the symbolic structure of the instance to output a different
+representation (e.g. a relaxation, or an input format for a different
+software).
 
+In this distribution all numerical solvers have been disabled (most of
+them require different subsolvers, some of which are not free).
+
+Solver/Reformulator list:
+
+- gomory: numerical solver, disabled
+- limitedbranch: numerical solver, disabled
+- localbranch: numerical solver, disabled
+- null: the null solver (use only if developing ROSE)
+- Rcdd: reformulator, transforms an LP into an inequality
+    representation input file incdd.ine for the CDD software package
+- Rconvexifier: reformulator, outputs a convex relaxation of the
+  problem in the output file Rconvexifier_out.ros
+- Rconvexifiermod: reformulator, outputs a pair of AMPL files
+    Rconvexifier_out.mod and Rconvexifier_out.dat encoding a linear
+    relaxation of the problem 
+- Rcopy: reformulator, creates a new, identical problem in memory (use
+    only if developing new solvers within ROSE)
+- Rdisaggr: reformulator, incomplete, don't use
+- Rfbbtfp: reformulator, outputs a .dat file for use within a project
+    for testing FBBT by fixed points (the .mod is not output, this
+    reformulator is only useful to participants to that specific project)
+- Roa: reformulator, incomplete
+- Rporta: reformulator, transforms an LP into an inequality
+    representation input file inporta.ieq for the PORTA software package
+- Rprintdat: reformulator, outputs an LP into a pair of AMPL files
+    Rprintdat.mod and Rprintdat.dat
+- Rprint: reformulator, prints the problem to screen [DEFAULT]
+- Rprintmod: reformulator, outputs a problem into an AMPL file
+    Rprintmod_out.mod 
+- Rprintncvxdiscr: reformulator, disabled
+- Rprodbincont: reformulator, linearizes x*y products where x is
+    binary by means of Fortet's inequalities, prints to screen
+- RQuarticConvex: reformulator, outputs a convex relaxation of quartic
+    problems by means of McCormick's bilinear envelopes composed with
+    Meyer&Floudas' trilinear ones
+- Rrelaxation: reformulator, incomplete
+- Rsmith: reformulator, prints the Smith relaxation of a problem to screen
+- Rsymmgroup: reformulator, outputs a nauty-formatted (actually,
+    dreadnaut-formatted) file called Rsymmgroup_out.nauty encoding
+    the DAG representation of the problem
+- Rvinci: reformulator, transforms an LP into an inequality
+    representation input file invinci.ine for the VINCI software package
+- sbb: numerical solver, disabled
+- subgradient: numerical solver, disabled
+- tabu: numerical solver, disabled
+- vns: numerical solver, disabled
 
 LICENSE
 
@@ -74,5 +126,5 @@ Procedure to create a new solver:
 5. rose.cxx (add help)
 
 
-REFERENCES
+
 

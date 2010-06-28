@@ -1,0 +1,18 @@
+ROSE / Ev3 Known bugs
+---------------------
+
+- Loss of memory when deallocating Ev3 trees; this is due to a disabled
+  delete which causes a segmentation fault when enabled. This bug has 
+  been present for a long time but I never managed to track it down
+  [LEO100627]
+
+- ROSE doesn't like constants added to the objective function - better
+  removing them and adding them back later. This might be troublesome
+  when ROSE is used from within AMPL. [LEO100627]
+
+- the solvers: gomory, limitedbranch, localbranch, sbb, subgradient, tabu, vns
+  are "numerical solvers" and have been disabled in this distribution (in 
+  any case some of them are in very early development and/or discontinued)
+
+- the solvers: Rdisaggr, Roa, Rrelaxation are incomplete
+

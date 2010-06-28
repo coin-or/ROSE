@@ -447,7 +447,7 @@ int main(int argc, char** argv) {
 
   // find out solver
   if (solvername == "none") {
-    solvername = "snopt";
+    solvername = "print";
   }
   for(int i = 1; i <= np; i++) {
     if (blob.GetParameterName(i) == "Solver" ||

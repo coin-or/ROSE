@@ -1,0 +1,5 @@
+variables = 0 < x < 1 / integer,
+	    0 < y < 2;
+objfun = [ 2*x*y + 4*y];
+constraints = [ 2 < x + y < PlusInfinity ];
+startingpoint = 0, 0;

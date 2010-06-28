@@ -132,6 +132,8 @@ int RfbbtfpSolver::Solve(bool reinitialize) {
   int m = NumberOfConstraints;
   int counter = 0;
 
+  double bigU = 1 / Epsilon;
+
   // read linear constraint expressions with bounds
   vector<Expression*> eptr;
   vector<double> elb;
@@ -153,12 +155,22 @@ int RfbbtfpSolver::Solve(bool reinitialize) {
   }
   m = counter;
 
-  // read variable bounds
+  // read variable bounds and cap at bigU
   map<int,double> xL;
   map<int,double> xU;
   for(int j = 1; j <= n; j++) {
     xL[j] = vlb[j - 1];
+    if (xL[j] < -bigU) {
+      xL[j] = -bigU;
+    } else if (xL[j] > bigU) {
+      xL[j] = bigU;
+    }
     xU[j] = vub[j - 1];
+    if (xU[j] > bigU) {
+      xU[j] = bigU;
+    } else if (xU[j] < -bigU) {
+      xU[j] = -bigU;
+    }
   }  
 
   map<int,double> XL(xL);
@@ -190,6 +202,7 @@ int RfbbtfpSolver::Solve(bool reinitialize) {
   map<int,double> coeff;
   vector<int> nNodes;
   map<int,pair<double,double> > bnds;
+  out << "param bigU := " << bigU << ";" << endl;
   out << "param n := " << n << ";" << endl;
   out << "param m := " << m << ";" << endl;
   for(int i = 0; i < m; i++) {
@@ -369,7 +382,6 @@ int RfbbtfpSolver::Solve(bool reinitialize) {
   int iteration = 1;
   map<int,double>::iterator mi;
   double fbbt_discrepancy = 2*Epsilon;
-  double totalsum = 0;
   while(fbbt_discrepancy > Epsilon) {
     // FBBT Up/Down iteration
     for (int h = 0; h < m; h++) {
@@ -395,7 +407,6 @@ int RfbbtfpSolver::Solve(bool reinitialize) {
       for(index = 1; index <= n; index++) {
         out << "#  x" << index << " in [" << XL[index] << "," << XU[index] 
              << "]" << endl;
-	totalsum += XU[index] - XL[index];
       }
       // update Z
       for(mi = XL.begin(); mi != XL.end(); mi++) {
@@ -409,6 +420,14 @@ int RfbbtfpSolver::Solve(bool reinitialize) {
     }
     iteration++;
   }
+
+  // compute final width
+  double totalsum = 0;
+  for(index = 1; index <= n; index++) {
+    totalsum += XU[index] - XL[index];
+  }
+
+  // compute final CPU time
   ttot2 = getcputime(tend);
   tpartial = tend[0] - tstart[0];
   out << "# sum of all variable intervals = " << totalsum << endl;
@@ -419,6 +438,12 @@ int RfbbtfpSolver::Solve(bool reinitialize) {
   out << "###################################################" << endl;
 
   out.close();
+
+  if (!Quiet) {
+    cout << "# sum of all variable intervals = " << totalsum << endl;
+    cout << "# Total CPU time = " << ttot2 << ", user CPU time = " << tpartial
+	 << endl;
+  }
 
   // after solution: set optimal values in problem
   IsSolved = true;

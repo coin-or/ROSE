@@ -2,7 +2,8 @@ ROSE INSTALLATION INSTRUCTIONS
 
 UNDER GNU/LINUX : 
 
-Uncompress the ROSE archive; then "cd rose; make"
+Uncompress the ROSE archive, enter the directory (either rose/ or rose-x.y/)
+and type "make"
 
 UNDER WINDOWS :
       

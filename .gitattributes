@@ -1,5 +1,6 @@
 * text=auto !eol
 /AUTHORS -text
+/BUGS -text
 Ev3/DISTFILES -text
 Ev3/FEATURES -text
 Ev3/FILES -text
@@ -65,6 +66,10 @@ Ev3/try/vecdelete.cxx -text
 /LICENSE -text
 /Makefile -text
 /README -text
+doc/liberti-reformulation_optimization_software_engine.pdf -text svneol=unset#unset
+doc/liberti-reformulations_mathprog_computational_approach.pdf -text
+examples/bilinear.ros -text
+examples/bilinear.sh -text
 /get.ASL -text
 /mksolverlist -text
 /mkversion -text

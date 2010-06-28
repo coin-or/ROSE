@@ -1779,7 +1779,7 @@ Ampl::ASL* Problem::ParseAMPL(char** argv, int argc) {
   case 4: limitedbranchlocalsolvername = "gomory"; break;
   case 5: limitedbranchlocalsolvername = "limitedbranch"; break;
   case 6: limitedbranchlocalsolvername = "localbranch"; break;
-  default: limitedbranchlocalsolvername = "snopt"; break;
+  default: limitedbranchlocalsolvername = "NONE"; break;
   }
 
   // local branch parameters

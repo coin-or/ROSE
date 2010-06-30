@@ -68,6 +68,7 @@ Ev3/try/vecdelete.cxx -text
 /README -text
 doc/liberti-reformulation_optimization_software_engine.pdf -text svneol=unset#unset
 doc/liberti-reformulations_mathprog_computational_approach.pdf -text
+examples/README -text
 examples/bilinear.ros -text
 examples/bilinear.sh -text
 examples/st_e40.mod -text

@@ -3,7 +3,9 @@ ROSE INSTALLATION INSTRUCTIONS
 UNDER GNU/LINUX : 
 
 Uncompress the ROSE archive, enter the directory (either rose/ or rose-x.y/)
-and type "make"
+and type "make". "make install" will copy some binaries in
+/usr/local/bin (you need to be root for this). The examples in
+examples/ rely on rose, roseamp and ampl being available in your path.
 
 UNDER WINDOWS :
       

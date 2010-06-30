@@ -5,6 +5,8 @@
 #          Common Public License
 # History: 050215 work started
 
+INSTALLDIR = /usr/local
+
 CXX		= c++
 #CXXFLAGS      = -g -DDEBUG -pg -DPROFILER
 #CXXFLAGS      = -g -DDEBUG -DMEMDEBUG -DVERBOSEDEBUG 
@@ -44,6 +46,10 @@ SQC		= external/solver_RQuarticConvex.o
 all:	writeversion dir $(AMPLLIB) $(EV3LIB) \
         $(OBJS) $(MAIN) cleanexe\
         $(EXE) nl2ros 
+
+install: all 
+	$(CP) -f $(EXE) $(INSTALLDIR)/bin
+	cd $(INSTALLDIR)/bin ; ln -sf  $(EXE) roseamp ; cd -
 
 writeversion:
 	rm -f rose.o

@@ -1,0 +1,8 @@
+At the moment the distribution is being put together. As a consequence, 
+there are far fewer examples here than we would like - apologies.
+
+In order for these examples to work, you need rose, roseamp and ampl
+to be installed somewhere in your path.
+
+Please write to the software maintainer (savourey@lix.polytechnique.fr)
+if you need further assistance.

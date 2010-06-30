@@ -49,6 +49,14 @@ and constants (0-ary operators) and non-leaf nodes with n subnodes
 correspond to n-ary operators. An arc (u,v) occurs in an expression
 tree if v is an argument of the operator u. See Ev3/ for more details.
 
+INSTALLATION 
+
+Uncompress the ROSE archive, enter the directory (either rose/ or
+rose-x.y/) and type "make". "make install" will copy some binaries in
+/usr/local/bin (you need to be root for this). The examples in
+examples/ rely on rose, roseamp and ampl being installed somewhere in 
+your path.
+
 SOLVERS
 
 ROSE consists of a collection of (numerical) solvers and
@@ -105,6 +113,94 @@ Solver/Reformulator list:
 - subgradient: numerical solver, disabled
 - tabu: numerical solver, disabled
 - vns: numerical solver, disabled
+
+USAGE
+
+From command line: you need a mathematical program encoded in the ROSE
+format (extension: .ros). This format is proprietary but it's easy
+to read and understand. See examples/bilinear.ros for a (hopefully)
+self-explanatory example. Typing 'rose' without arguments prints the
+following help message:
+
+  Syntax: rose [options] file
+   where file specifies the optimization problems (.ros format),
+   and options can be:
+    -h for this help
+    -p parameter_list ("param val, param val, ...", quote the list)
+    -n no automatic simplifier
+    -q for quiet mode
+    -s solvername (gomory limitedbranch localbranch null Rcdd
+       Rconvexifier Rconvexifiermod Rcopy Rdisaggr Rfbbtfp Roa Rporta
+       Rprintdat Rprint Rprintmod Rprintncvxdiscr Rprodbincont
+       RQuarticConvex Rrelaxation Rsmith Rsymmgroup Rvinci sbb subgradient
+       tabu vns ) 
+    -t table output
+   Rose may also be used as an AMPL solver -- rename it as "roseamp" and
+   put it in the path, then call ampl with "option solver roseamp"
+
+From AMPL: you need 'rose', 'roseamp' and 'ampl' to be installed
+somewhere in your path. Get AMPL to read a model and optionally a data
+file, then specify the roseamp solver with the command 
+
+  option solver roseamp;
+
+within AMPL, then specify the ROSE solver/reformulator to use. These
+are identified by means of an integer ID. Use the AMPL command
+
+  option roseamp_options "mainsolver=ID"; 
+
+to specify the solver to be used. Different solvers might have
+different outputs. Some output to screen, some to files with default
+names usually referring to the solver name. Typing 'roseamp' at the
+command line will print out some help:
+
+        Syntax: roseamp is an AMPL (www.ampl.com) solver                    
+          insert "option solver roseamp" in your AMPL directives
+          after making sure that the executable "roseamp" is in the path
+        AMPL solver options (use "option roseamp_options" AMPL directive)
+          convexifieroutampl (0=no, 1=yes)
+          limitedbrancharbitrary (double in [0,1])
+          limitedbranchlocalsolver (solver code)
+          limitedbranchmaxtime (in seconds)
+          localbranchwarmup (0 or 1)
+          mainsolver (solver code)
+          nosimplifier (0 or 1)
+          quiet (0 or 1)
+          relaxinteger (0 or 1)
+          symmgroupouttype (0=nauty[default], 1=AMPL .dat)
+          vnsepsilon (double)
+          vnskmax (max VNS neighbourhood size (int))
+          vnskmin (min VNS neighbourhood size (int))
+          vnslocalsolver (solver code)
+          vnsmaxtime (seconds)
+          vnssamples (number of starting points in each neighbourhoods)
+          vnswarmup (0 or 1)
+        where the solver code is an integer defined as follows:
+           1: tabu(letsgo)
+           3: vns
+           4: gomory
+           5: limitedbranch
+           6: localbranch
+           7: analyser
+           8: prodbincont
+           9: print
+          10: smith
+          11: copy
+          12: disaggr
+          13: oa
+          14: symmgroup
+          15: printmod
+          17: rvinci
+          18: rporta
+          19: rquarticconvex
+          20: rconvexifier
+          21: rprintdat
+          22: rcdd
+          23: rrelaxation
+          24: subgradient
+          25: rconvexifiermod
+          26: rprintncvxdiscrepancy
+          27: rfbbtfp                                                        
 
 LICENSE
 

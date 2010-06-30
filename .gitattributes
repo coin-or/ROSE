@@ -70,6 +70,9 @@ doc/liberti-reformulation_optimization_software_engine.pdf -text svneol=unset#un
 doc/liberti-reformulations_mathprog_computational_approach.pdf -text
 examples/bilinear.ros -text
 examples/bilinear.sh -text
+examples/st_e40.mod -text
+examples/st_e40.run -text
+examples/st_e40.sh -text
 /get.ASL -text
 /mksolverlist -text
 /mkversion -text

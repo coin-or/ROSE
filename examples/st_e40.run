@@ -1,0 +1,5 @@
+model st_e40.mod;
+option solver roseamp;
+option roseamp_options "mainsolver=10";
+solve;
+

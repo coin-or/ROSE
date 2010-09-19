@@ -5,7 +5,7 @@
 ** Purpose:    Solver Rsymmgroup implementation
 **             This solver outputs a representation of the problem structure
 **             so that the symmetry group of the problem can be computed
-**             either through Nauty (expressions DAG, for general MINLPs)
+**             either through Nauty (expressions DAG, for general MINLPs),
 **             or through the method given in the COCOA08 paper 
 **             (AMPL, for linear problems only)
 ** License:    (C) Leo Liberti, all rights reserved. Code published under the 
@@ -313,24 +313,6 @@ int SymmgroupSolver::Solve(bool reinitialize) {
       topnode++;
     }
 
-#ifdef DEBUG
-    // print VColor /////////////////////////////////////
-    {
-      int dcc = 0;
-      for(map<int,set<int> >::iterator dmit2 = VColor.begin(); 
-	  dmit2 != VColor.end(); dmit2++) {
-	dcc++;
-	cout << "color " << dcc << "(" << dmit2->first << "):";
-	for(set<int>::iterator dsit2 = dmit2->second.begin();
-	    dsit2 != dmit2->second.end(); dsit2++) {
-	  cout << " " << *dsit2;
-	}
-	cout << "\n";
-      }
-    }
-    // end print VColor /////////////////////////////////
-#endif
-
     // output Rsymmgroup_out.nauty
     int Vsize = DAG.size();
     int vid;
@@ -379,7 +361,7 @@ int SymmgroupSolver::Solve(bool reinitialize) {
 	out << " " << *vit2;
       }
     }
-    out << "\n]\n! execute nauty\nx\n";
+    out << "\n]\n! execute nauty\nx\n! type orbits\no\n";
     
   } else if (OutType == 1) {
     // AMPL .dat output for use with findsymm.mod (see COCOA08 paper)

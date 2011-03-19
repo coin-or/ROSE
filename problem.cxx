@@ -1132,7 +1132,6 @@ void Problem::Parse(char* thefilename) {
       }
     }
   }
-
   fclose(Ev3f);
 
   // size up the problem
@@ -1154,6 +1153,30 @@ void Problem::Parse(char* thefilename) {
 
   // simplify the problem if possible
   Simplifier(false);
+  
+  // set formulation information 
+  SetProblemLinear();
+}
+
+void Problem::SetProblemLinear(void) {
+  // is problem linear (MILP)? 
+  IsProbLinear = true;
+  for(int i = 1; i <= NumberOfObjectives; i++) {
+    if (!GetObjectiveLI(i)->Function->IsLinear()) {
+      IsProbLinear = false;
+      cerr << "WARNING: problem is nonlinear" << endl;
+      break;
+    }
+  }
+  if (IsProbLinear) {
+    for(int i = 1; i <= NumberOfConstraints; i++) {
+      if (!GetConstraintLI(i)->Function->IsLinear()) {
+	IsProbLinear = false;
+	cerr << "WARNING: problem is nonlinear" << endl;
+	break;
+      }
+    }
+  }
 }
 
 void Problem::ParseEv3String(char* element, int status, int lineno) {
@@ -1800,6 +1823,10 @@ Ampl::ASL* Problem::ParseAMPL(char** argv, int argc) {
 
   // simplify the problem if possible
   Simplifier(true);
+
+  // set formulation information 
+  SetProblemLinear();
+
   return asl;
 }
 

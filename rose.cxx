@@ -54,7 +54,7 @@ namespace Ampl {
   static int vnsneighbourhood = 1;
   static int vnssamples = 1;
   static int vnswarmup = 1;
-  static int symmgroupouttype = 1;
+  static int symmgroupouttype = 0;
   static keyword keywds[] = { // must be alphabetical
     KW(CHR"convexifieroutampl", I_val, &convexifieroutampl,
        CHR"Whether Rconvexifier should produce AMPL output"),
@@ -188,7 +188,7 @@ void Help(bool amplflag) {
     cout << "  relaxinteger (0 or 1)" << endl;
     //    cout << "  snopt6majoriterations (number of iterations)" << endl;
     //    cout << "  snopt6minoriterations (number of iterations)" << endl;
-    cout << "  symmgroupouttype (0=nauty[default], 1=AMPL .dat)" << endl;
+    cout << "  symmgroupouttype (0=nauty[default], 1=AMPL .dat [fpp.mod], 2=AMPL .dat [MILP])" << endl;
     cout << "  vnsepsilon (double)" << endl;
     cout << "  vnskmax (max VNS neighbourhood size (int))" << endl;
     cout << "  vnskmin (min VNS neighbourhood size (int))" << endl;
@@ -232,6 +232,7 @@ void Help(bool amplflag) {
     cout << "  and options can be:\n";
     cout << "    -h for this help\n";
     cout << "    -p parameter_list (\"param val, param val, ...\", quote the list)\n";
+    cout << "       (param names are capitalized, e.g. SymmgroupOutType)\n";
     cout << "    -n no automatic simplifier\n";
     cout << "    -q for quiet mode\n";
     cout << "    -s solvername (" << ROSESOLVERLIST << ")\n";

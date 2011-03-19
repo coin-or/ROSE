@@ -25,6 +25,7 @@
 
 #define FIRSTOBJ 1
 #define EPSILON 1e-4
+#define MAXWIDTH 50
 
 // Rsymmgroup CLASS METHODS
 
@@ -101,7 +102,7 @@ void SymmgroupSolver::Initialize(bool force = false) {
     Quiet = true;
   }
 
-  if (OutType < 0 || OutType > 1) {
+  if (OutType < 0 || OutType > 2) {
     cerr << "SymmgroupSolver::Initialize(): error: OutType (" 
 	 << OutType << ") out of bounds\n";
     exit(20);
@@ -111,6 +112,8 @@ void SymmgroupSolver::Initialize(bool force = false) {
     OutFile = "Rsymmgroup_out.nauty";
   } else if (OutType == 1) {
     OutFile = "Rsymmgroup_out.dat";
+  } else if (OutType == 2) {
+    OutFile = "Rsymmgroup_out.gap";
   }
 
   // variable integrality
@@ -156,6 +159,7 @@ int SymmgroupSolver::Solve(bool reinitialize) {
     cout << "\n";
   }
   ofstream out(OutFile.c_str());
+  Constraint* theCon = NULL;
 
   if (OutType == 0) {
 
@@ -193,7 +197,7 @@ int SymmgroupSolver::Solve(bool reinitialize) {
       }
     }
     for(int i = 1; i <= NumberOfConstraints; i++) {
-      Constraint* theCon = InProb->GetConstraintLI(i);
+      theCon = InProb->GetConstraintLI(i);
       level = theCon->Function->GetNumberOfExplicitLevels();
       if (level > maxlevel) {
 	maxlevel = level;
@@ -206,7 +210,7 @@ int SymmgroupSolver::Solve(bool reinitialize) {
       theObj->Function->GetNumberOfDistinctConstantsRecursive(ConstantSymm);
     }
     for(int i = 1; i <= NumberOfConstraints; i++) {
-      Constraint* theCon = InProb->GetConstraintLI(i);
+      theCon = InProb->GetConstraintLI(i);
       theCon->Function->GetNumberOfDistinctConstantsRecursive(ConstantSymm);
     }
     // constant symmetry classes (colours) according to value equality
@@ -284,7 +288,7 @@ int SymmgroupSolver::Solve(bool reinitialize) {
     pair<int,pair<double,double> > p;
     // compute map symmclass -> constrid
     for(int i = 1; i <= NumberOfConstraints; i++) {
-      Constraint* theCon = InProb->GetConstraintLI(i);
+      theCon = InProb->GetConstraintLI(i);
       p.first = theCon->Function->GetNumberOfNodes();
       p.second.first = theCon->LB;
       p.second.second = theCon->UB;
@@ -303,7 +307,7 @@ int SymmgroupSolver::Solve(bool reinitialize) {
     // do constraints
     level = 1;
     for(int i = 1; i <= NumberOfConstraints; i++) {
-      Constraint* theCon = InProb->GetConstraintLI(i);
+      theCon = InProb->GetConstraintLI(i);
       theCon->Function->AddExpressionTreeToDAG(DAG, VOp, VColor, 
 					       ConstrSymm, i, 
 					       ConstantSymm,  
@@ -364,7 +368,13 @@ int SymmgroupSolver::Solve(bool reinitialize) {
     out << "\n]\n! execute nauty\nx\n! type orbits\no\n";
     
   } else if (OutType == 1) {
-    // AMPL .dat output for use with findsymm.mod (see COCOA08 paper)
+
+    if (!InProb->IsProblemLinear()) {
+      cerr << "solver_Rsymmgroup.cxx::Solve(): ERROR: symmgroupouttype=1 on (MI)NLP, abort" << endl;
+      exit(154);
+    }
+
+    // AMPL .dat output for use with fpp.mod (see COCOA08 paper)
     // generalities
     out << "# P instance representation for symmgroup" << endl;
     out << "# P has " << NumberOfVariables << " variables, "
@@ -427,7 +437,7 @@ int SymmgroupSolver::Solve(bool reinitialize) {
     linpart.erase(linpart.begin(),linpart.end());
     linrhs.erase(linrhs.begin(),linrhs.end());
     for(int i = 1; i <= NumberOfConstraints; i++) {
-      Constraint* theCon = InProb->GetConstraintLI(i);
+      theCon = InProb->GetConstraintLI(i);
       theCon->Function->GetLinearInfo(lincoeff, linvi, linvn, linc);
       p.first = i;
       for(int j = 0; j < lincoeff.size(); j++) {
@@ -456,7 +466,7 @@ int SymmgroupSolver::Solve(bool reinitialize) {
     // first pass: represent 1e30 with something else
     double infrep = 0;
     for(int i = 1; i <= NumberOfConstraints; i++) {
-      Constraint* theCon = InProb->GetConstraintLI(i);
+      theCon = InProb->GetConstraintLI(i);
       if (fabs(theCon->LB + linrhs[i-1]) < 1e30 && 
 	  fabs(theCon->LB + linrhs[i-1]) > infrep) {
 	infrep = fabs(theCon->LB + linrhs[i-1]) + 1;
@@ -468,7 +478,7 @@ int SymmgroupSolver::Solve(bool reinitialize) {
     }
     // second pass
     for(int i = 1; i <= NumberOfConstraints; i++) {
-      Constraint* theCon = InProb->GetConstraintLI(i);
+      theCon = InProb->GetConstraintLI(i);
       out << " " << i << "  ";
       if (theCon->LB + linrhs[i-1] <= -1e30) {
 	out << -infrep;
@@ -483,6 +493,212 @@ int SymmgroupSolver::Solve(bool reinitialize) {
       }
     }
     out << ";" << endl;
+
+  } else if (OutType == 2) {
+    // output a MILP as Gap code: an m x n  constraint matrix A, 
+    // a cost n-vector c, lhs/rhs m-vectors bL, bU, lower/upper var bound
+    // n-vectors xL, xU, integrality n-vector I
+    // PRECONDITION: all data must be integer
+
+    if (!InProb->IsProblemLinear()) {
+      cerr << "solver_Rsymmgroup.cxx::Solve(): ERROR: symmgroupouttype=2 on (MI)NLP, abort" << endl;
+      exit(154);
+    }
+
+    out << fixed;
+
+    // variable info
+    out << "# P instance representation in Gap format" << endl;
+    out << "xL := [";
+    out << float2fraction(vlb[0]);
+    for(int i = 1; i <= NumberOfVariables - 1; i++) {
+      out << ",";
+      if (i % MAXWIDTH == 0) {
+	out << "\n";
+      }
+      out << float2fraction(vlb[i]);
+    }
+    out << "];\n";
+    out << "xU := [";
+    out << float2fraction(vub[0]);
+    for(int i = 1; i <= NumberOfVariables - 1; i++) {
+      out << ",";
+      if (i % MAXWIDTH == 0) {
+	out << "\n";
+      }
+      out << float2fraction(vub[i]);
+    }
+    out << "];\n";
+    out << "I := [";
+    out << integrality[0];
+    for(int i = 1; i <= NumberOfVariables - 1; i++) {
+      out << ",";
+      if (i % MAXWIDTH == 0) {
+	out << "\n";
+      }
+      out << integrality[i];
+    }
+    out << "];\n";
+
+    // objective info
+    vector<double> lincoeff;
+    vector<int> linvi;
+    vector<string> linvn;
+    double linc;
+    map<pair<int,int>,double> linpart;
+    vector<double> linrhs;
+    pair<int,int> p;
+    for(int i = 1; i <= NumberOfObjectives; i++) {
+      Objective* theObj = InProb->GetObjectiveLI(i);
+      theObj->Function->GetLinearInfo(lincoeff, linvi, linvn, linc);
+      p.first = i;
+      for(int j = 0; j < lincoeff.size(); j++) {
+	p.second = InProb->GetVarLocalIndex(linvi[j]);
+	linpart[p] = lincoeff[j];
+      }
+      linrhs.push_back(linc);
+    }
+    out << "c := [";
+    p.first = 1;
+    p.second = 1;
+    out << float2fraction(linpart[p]);
+    for(int j = 2; j <= NumberOfVariables; j++) {
+      p.second = j;
+      out << ",";
+      if (j % MAXWIDTH == 0) {
+	out << "\n";
+      }
+      out << float2fraction(linpart[p]);
+    }
+    out << "];\n" << endl;
+
+    // constraints info
+    linpart.erase(linpart.begin(),linpart.end());
+    linrhs.erase(linrhs.begin(),linrhs.end());
+    for(int i = 1; i <= NumberOfConstraints; i++) {
+      theCon = InProb->GetConstraintLI(i);
+      theCon->Function->GetLinearInfo(lincoeff, linvi, linvn, linc);
+      p.first = i;
+      for(int j = 0; j < lincoeff.size(); j++) {
+	p.second = InProb->GetVarLocalIndex(linvi[j]);
+	linpart[p] = lincoeff[j];
+      }
+      linrhs.push_back(linc);
+    }
+    out << "A := [";
+    p.first = 1;
+    p.second = 1;
+    out << "[" << float2fraction(linpart[p]);
+    for(int j = 2; j <= NumberOfVariables; j++) {
+      p.second = j;
+      out << ",";
+      if (j % MAXWIDTH == 0) {
+	out << "\n";
+      }
+      out << float2fraction(linpart[p]);
+    }
+    out << "]";
+    for(int i = 2; i <= NumberOfConstraints; i++) {
+      p.first = i;
+      p.second = 1;
+      out << ",\n [" << linpart[p];
+      for(int j = 2; j <= NumberOfVariables; j++) {
+	p.second = j;
+	out << ","; 
+	if (j % MAXWIDTH == 0) {
+	  out << "\n";
+	}
+	out << float2fraction(linpart[p]);
+      }
+      out << "]";
+    }
+    out << "];\n" << endl;
+    // first pass: represent 1e30 with something smaller
+    double infrep = 0;
+    for(int i = 1; i <= NumberOfConstraints; i++) {
+      theCon = InProb->GetConstraintLI(i);
+      if (fabs(theCon->LB + linrhs[i-1]) < 1e30 && 
+	  fabs(theCon->LB + linrhs[i-1]) > infrep) {
+	infrep = fabs(theCon->LB + linrhs[i-1]) + 1;
+      }
+      if (fabs(theCon->UB + linrhs[i-1]) < 1e30 && 
+	  fabs(theCon->UB + linrhs[i-1]) > infrep) {
+	infrep = fabs(theCon->UB + linrhs[i-1]) + 1;
+      }
+    }
+    out << "bL := [";
+    // second pass
+    vector<int> coninfL;
+    theCon = InProb->GetConstraintLI(1);
+    if (theCon->LB + linrhs[0] <= -1e30) {
+      coninfL.push_back(-1);
+      out << float2fraction(-infrep);
+    } else {
+      coninfL.push_back(0);
+      out << float2fraction(theCon->LB + linrhs[0]);
+    }
+    for(int i = 2; i <= NumberOfConstraints; i++) {
+      theCon = InProb->GetConstraintLI(i);
+      out << ",";
+      if (i % MAXWIDTH == 0) {
+	out << "\n";
+      }
+      if (theCon->LB + linrhs[i-1] <= -1e30) {
+	coninfL.push_back(-1);
+	out << float2fraction(-infrep);
+      } else {
+	coninfL.push_back(0);
+	out << float2fraction(theCon->LB + linrhs[i - 1]);
+      }
+    }
+    out << "];\n";
+    vector<int> coninfU;
+    out << "bU := [";
+    theCon = InProb->GetConstraintLI(1);
+    if (theCon->UB + linrhs[0] >= 1e30) { 
+      coninfU.push_back(1);
+      out << float2fraction(infrep);
+    } else {
+      coninfU.push_back(0);
+      out << float2fraction(theCon->UB + linrhs[0]);
+    }
+    for(int i = 2; i <= NumberOfConstraints; i++) {
+      theCon = InProb->GetConstraintLI(i);
+      out << ",";
+      if (i % MAXWIDTH == 0) {
+	out << "\n";
+      }
+      if (theCon->UB + linrhs[i - 1] >= 1e30) { 
+	coninfU.push_back(1);
+	out << float2fraction(infrep);
+      } else {
+	coninfU.push_back(0);
+	out << float2fraction(theCon->UB + linrhs[i - 1]);
+      }
+    }
+    out << "];\n" << endl;
+    out << "Cdir := [";
+    if (coninfL[0] == -1 && coninfU[0] == 0) {
+      out << -1;
+    } else if (coninfL[0] == 0 && coninfU[0] == 1) {
+      out << 1;
+    } else if (coninfL[0] == 0 && coninfU[0] == 0) {
+      out << 0;
+    }
+    for(int i = 1; i < NumberOfConstraints; i++) {
+      out << ",";
+      if (i % MAXWIDTH == 0) {
+	out << "\n";
+      }
+      if (coninfL[i] == -1 && coninfU[i] == 0) {
+	out << -1;
+      } else if (coninfL[i] == 0 && coninfU[i] == 1) {
+	out << 1;
+      } else if (coninfL[i] == 0 && coninfU[i] == 0) {
+	out << 0;
+      }
+    }
+    out << "];\n" << endl;
   }
   out.close();
 

@@ -13,7 +13,9 @@
 #include <iostream>
 #include <cassert>
 #include <cstdlib>
-#include <sys/time.h> 
+#include <sys/time.h>
+
+#define MAXPRECISION 1e6
 
 /** Utility function for getting the CPU time
     @return the time
@@ -192,8 +194,7 @@ int parmtype(char* parmval, bool& boolval, int& intval, double& doubleval,
 
 //// permutations of 3 elements
 
-void permutation3old(int **ind)
-{
+void permutation3old(int **ind) {
   ind[0][0] = 0; ind[0][1] = 1; ind[0][2] = 2;
   ind[1][0] = 0; ind[1][1] = 2; ind[1][2] = 1;
   ind[2][0] = 1; ind[2][1] = 0; ind[2][2] = 2;
@@ -201,8 +202,7 @@ void permutation3old(int **ind)
   ind[4][0] = 2; ind[4][1] = 0; ind[4][2] = 1;
   ind[5][0] = 2; ind[5][1] = 1; ind[5][2] = 0;
 }
-void permutation3(int **ind,int *ibnd)
-{
+void permutation3(int **ind,int *ibnd) {
   ind[0][0] = ibnd[0]; ind[0][1] = ibnd[1]; ind[0][2] = ibnd[2];
   ind[1][0] = ibnd[0]; ind[1][1] = ibnd[2]; ind[1][2] = ibnd[1];
   ind[2][0] = ibnd[1]; ind[2][1] = ibnd[0]; ind[2][2] = ibnd[2];
@@ -211,5 +211,76 @@ void permutation3(int **ind,int *ibnd)
   ind[5][0] = ibnd[2]; ind[5][1] = ibnd[1]; ind[5][2] = ibnd[0];
 }
 
+/** convert a floating-point number to a fraction in a string
+    @return the fraction
+    @param the floating point number
+*/
+#include <sstream>
+#include <cmath>
 
+int gcd(long a, long b) {
+  if (a < 0) {
+    a = -a;
+  } 
+  if (b < 0) {
+    b = -b;
+  }
+  if (a == 1 || b == 1) {
+    return 1;
+  } 
+  if (a == 0 || b == 0) {
+    std::cerr << "rose: error: gcd(a,b) with a or b = 0, abort\n";
+    exit(144);
+  }
+  long t;
+  while (b != 0) {
+    t = b;
+    b = a % b;
+    a = t;
+  }
+  return a;
+}
 
+#include <climits>
+std::string float2fraction(double a) {
+  using namespace std;
+  ostringstream oss;
+  oss << fixed;
+  if (a > LONG_MAX) {
+    oss << LONG_MAX;
+  } else if (a < LONG_MIN) {
+    oss << LONG_MIN;
+  } else if (fabs(a - rint(a)) < 1/MAXPRECISION) {
+    a = rint(a);
+    oss << a;
+  } else {
+    int asign = 1;
+    if (a < 0) {
+      asign = -1;
+      a = -a;
+    }
+    long denominator = 1;
+    a = rint(a * MAXPRECISION) / MAXPRECISION;
+    while(fabs(a - rint(a)) > 1/MAXPRECISION) {
+      a *= 10;
+      denominator *= 10;
+    }
+    if (denominator < 0) {
+      cerr << "rose: error: float2fraction(" << a 
+	   << ") failed (denominator = " << denominator << " < 0, abort\n";
+      exit(145);
+    }
+    long thegcd = gcd((long) a, denominator);
+    long numerator = ((long) a) / thegcd;
+    denominator /= thegcd;
+    if (numerator == 0) {
+      oss << 0;
+    } else if (denominator == 1) {
+      oss << asign * numerator;
+    } else {
+      oss << asign * numerator << "/" << denominator;
+    }
+  }
+  string ret(oss.str());
+  return ret;
+}

@@ -170,6 +170,7 @@ class Problem {
   void SetName(std::string thename) { Name = thename; }
   bool IsProblemContinuous(void) { return IsProbContinuous; }
   bool IsProblemLinear(void) { return IsProbLinear; }
+  void SetProblemLinear(void);
   Problem* GetParent(void) { return Parent; }
   int GetNumberOfChildren(void) { return Children.size(); }
   Problem* GetChild(int childindex);

@@ -28,4 +28,7 @@ int parmtype(char* parmval, bool& boolval, int& intval, double& doubleval,
 
 void permutation3old(int **ind);
 void permutation3(int **ind,int *ibnd);
+
+int gcd(int a, int b);
+std::string float2fraction(double a);
 #endif

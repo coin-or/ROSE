@@ -245,14 +245,13 @@ int gcd(long a, long b) {
 std::string float2fraction(double a) {
   using namespace std;
   ostringstream oss;
-  oss << fixed;
   if (a > LONG_MAX) {
     oss << LONG_MAX;
   } else if (a < LONG_MIN) {
     oss << LONG_MIN;
   } else if (fabs(a - rint(a)) < 1/MAXPRECISION) {
     a = rint(a);
-    oss << a;
+    oss << (int) a;
   } else {
     int asign = 1;
     if (a < 0) {

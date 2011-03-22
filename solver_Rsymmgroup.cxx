@@ -505,8 +505,6 @@ int SymmgroupSolver::Solve(bool reinitialize) {
       exit(154);
     }
 
-    out << fixed;
-
     // variable info
     out << "# P instance representation in Gap format" << endl;
     out << "xL := [";

@@ -94,6 +94,7 @@ amplsolverclean:
 distclean: clean Ev3clean libf2cclean 
 	$(RM) -f *~ core* redcongraph.dot
 	$(RM) -rf amplsolver/
+	$(RM) -rf solvers/
 	$(RM) -rf external/
 
 solver_RQuarticConvex.o: solver_RQuarticConvex.cxx solver_RQuarticConvex.h

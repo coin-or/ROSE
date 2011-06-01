@@ -312,9 +312,11 @@ int SymmgroupSolver::Solve(bool reinitialize) {
     }
 
     // do constraints
+    set<int> ConstraintNodeID;
     level = 1;
     for(int i = 1; i <= NumberOfConstraints; i++) {
       theCon = InProb->GetConstraintLI(i);
+      ConstraintNodeID.insert(startnode + topnode);
       theCon->Function->AddExpressionTreeToDAG(DAG, VOp, VColor, 
 					       ConstrSymm, i, 
 					       ConstantSymm,  
@@ -335,6 +337,17 @@ int SymmgroupSolver::Solve(bool reinitialize) {
 	it != VarNameInv.end(); it++) {
       out << "! varname " << it->first << " = " << it->second << endl;
     }
+    // output constraint topmost operator node IDs
+    out << "! ConstrNodeID := [";
+    set<int>::iterator theit = ConstraintNodeID.begin();
+    if (theit != ConstraintNodeID.end()) {
+      out << *theit;
+      theit++;
+      for( ; theit != ConstraintNodeID.end(); theit++) { 
+	out << "," << *theit;
+      }
+    }
+    out << "];\n";
     // output ops
     for(map<int,int>::iterator it = VOp.begin(); it != VOp.end(); it++) {
       out << "! op(" << it->first << ") = " << it->second << endl;

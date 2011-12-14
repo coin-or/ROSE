@@ -44,6 +44,7 @@
 #include "solver_Rprintncvxdiscr.h"
 #include "solver_Rfbbtfp.h"
 #include "solver_null.h"
+#include "solver_Rmilp2gph.h"
 
 // add new solver header files here
 
@@ -178,6 +179,10 @@ Solver* NewSolver(std::string solvername) {
 	     solvername == "Rfbbtfp" || solvername == "RFBBTFP") {
     solvername = "rfbbtfp";
     ret = new RfbbtfpSolver;
+  } else if (solvername == "milp2gph" || solvername == "rmilp2gph" ||
+	     solvername == "Rmilp2gph" || solvername == "RMILP2GPH") {
+    solvername = "rmilp2gph";
+    ret = new Rmilp2gphSolver;
   }
 
 
@@ -261,6 +266,8 @@ void DeleteSolver(Solver* s) {
       delete dynamic_cast<SubgradientSolver*>(s);
     } else if (solvername == "rprintncvxdiscrepancy") {
       delete dynamic_cast<RprintncvxdiscrSolver*>(s);
+    } else if (solvername == "rmilp2gph") {
+      delete dynamic_cast<Rmilp2gphSolver*>(s);
     }
 
   }

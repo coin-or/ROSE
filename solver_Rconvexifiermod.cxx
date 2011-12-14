@@ -220,7 +220,8 @@ int RconvexifiermodSolver::Solve(bool reinitialize) {
   if (!InProb->IsProblemContinuous()) {
     out << "# original variables (integer)" << endl;
     out << "set  Rcvx_intVars;" << endl;
-    out << "var Rcvx_xInt{j in Rcvx_intVars} <= Rcvx_U[j], >= Rcvx_L[j], integer;"
+    out << 
+      "var Rcvx_xInt{j in Rcvx_intVars} <= Rcvx_U[j], >= Rcvx_L[j], integer;" 
 	<< endl;
 
     int n_varcont = 0;

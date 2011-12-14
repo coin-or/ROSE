@@ -34,7 +34,7 @@ OBJS		= problem.o utils.o solver.o newsolver.o \
                   solver_Rprintdat.o solver_Rcdd.o \
 		  solver_Rrelaxation.o solver_subgradient.o \
                   solver_Rconvexifiermod.o solver_Rprintncvxdiscr.o \
-                  solver_Rfbbtfp.o solver_null.o
+                  solver_Rfbbtfp.o solver_null.o solver_Rmilp2gph.o
 MAIN		= rose.o
 EXE		= rose
 LIBS		= $(OBJS) $(EV3LIB)

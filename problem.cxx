@@ -1720,6 +1720,7 @@ Ampl::ASL* Problem::ParseAMPL(char** argv, int argc) {
   case 25: mainsolvername = "rconvexifiermod"; break;
   case 26: mainsolvername = "rprintncvxdiscrepancy"; break;
   case 27: mainsolvername = "rfbbtfp"; break;
+  case 28: mainsolvername = "rmilp2gph"; break;
   default: mainsolvername = "print"; break;
   }
   ParameterBlob.SetStringParameter("MainSolver", mainsolvername);
@@ -1767,7 +1768,9 @@ Ampl::ASL* Problem::ParseAMPL(char** argv, int argc) {
   // Rsymmgroup parameters
   ParameterBlob.SetIntParameter("SymmgroupOutType", *Ampl::TheSymmgroupOutType);
   // Rfbbtfp parameters
-  // ...
+  // [none]
+  // Rmilp2gph parameters
+  // [none]
   // vns parameters
   ParameterBlob.SetDoubleParameter("VNSEpsilon", *Ampl::TheVNSEpsilon);
   ParameterBlob.SetIntParameter("VNSKmax", *Ampl::TheVNSKmax);

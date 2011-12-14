@@ -101,6 +101,8 @@ examples/st_e40.sh -text
 /solver_Rdisaggr.h -text
 /solver_Rfbbtfp.cxx -text
 /solver_Rfbbtfp.h -text
+/solver_Rmilp2gph.cxx -text
+/solver_Rmilp2gph.h -text
 /solver_Roa.cxx -text
 /solver_Roa.h -text
 /solver_Rporta.cxx -text

@@ -226,7 +226,7 @@ void Help(bool amplflag) {
     cout << "  25: rconvexifiermod [output cvx rel of polynomial programs]" << endl;
     cout << "  26: rprintncvxdiscrepancy [discrepancy between defvars and their cvxrel]" << endl;
     cout << "  27: rfbbtfp [perform FBBT and output FBBTLP formulation]" << endl;
-    cout << "  28: rmilp2gph [interpret MILP constr matrix as adj matrix of graph]" << endl;
+    cout << "  28: rmilp2gph [output bipartite constr/var incidence graph as .gph]" << endl;
   } else {
     cout << "Syntax: rose [options] file\n";
     cout << "  where file specifies the optimization problems (.ros format),\n";

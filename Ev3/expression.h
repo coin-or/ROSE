@@ -459,12 +459,15 @@ public:
   // lincoeff[i] is the i-th nonzero coeff, linvi[i] is the corresponding
   // i-th varindex (starts from 1), c is the constant term to be added
   bool GetLinearInfo(std::vector<double>& lincoeff, 
-		     std::vector<int>& linvi, std::vector<std::string>& linvn,double& c);
+		     std::vector<int>& linvi, std::vector<std::string>& linvn,
+		     double& c);
+
   // return info about the pure linear part (assumes Simplify() has
   // already been called on this) - much as above call but the "pure
   // linear part" is e.g. x+y in x+y+y^2
   bool GetPureLinearInfo(std::vector<double>& lincoeff, 
-			 std::vector<int>& linvi, std::vector<std::string>& linvn, 
+			 std::vector<int>& linvi, 
+			 std::vector<std::string>& linvn, 
 			 double& c);
 
   // get the linear part - x in x+y+y^2

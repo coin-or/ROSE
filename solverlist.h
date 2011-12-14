@@ -1,1 +1,1 @@
-#define ROSESOLVERLIST "gomory limitedbranch localbranch null Rcdd Rconvexifier Rconvexifiermod Rcopy Rdisaggr Rfbbtfp Roa Rporta Rprintdat Rprint Rprintmod Rprintncvxdiscr Rprodbincont RQuarticConvex Rrelaxation Rsmith Rsymmgroup Rvinci sbb subgradient tabu vns "
+#define ROSESOLVERLIST "gomory limitedbranch localbranch null Rcdd Rconvexifier Rconvexifiermod Rcopy Rdisaggr Rfbbtfp Rmilp2gph Roa Rporta Rprintdat Rprint Rprintmod Rprintncvxdiscr Rprodbincont RQuarticConvex Rrelaxation Rsmith Rsymmgroup Rvinci sbb subgradient tabu vns "

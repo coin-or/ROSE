@@ -188,7 +188,7 @@ void Help(bool amplflag) {
     cout << "  relaxinteger (0 or 1)" << endl;
     //    cout << "  snopt6majoriterations (number of iterations)" << endl;
     //    cout << "  snopt6minoriterations (number of iterations)" << endl;
-    cout << "  symmgroupouttype (0=nauty[default], 1=AMPL .dat [fpp.mod], 2=AMPL .dat [MILP])" << endl;
+    cout << "  symmgroupouttype (0=nauty[default], 1=AMPL.dat(MILP,fpp.mod), 2=GAP(MILP)), 3=gph" << endl;
     cout << "  vnsepsilon (double)" << endl;
     cout << "  vnskmax (max VNS neighbourhood size (int))" << endl;
     cout << "  vnskmin (min VNS neighbourhood size (int))" << endl;

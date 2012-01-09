@@ -14,7 +14,8 @@ libEv3.a: test
 	$(AR) r libEv3.a $(OBJS)
 
 test:	smithmain.cxx $(OBJS)
-	$(CXX) $(CXXFLAGS) -o test $(LIBS) convexifiermain.cxx
+	$(CXX) $(CXXFLAGS) -o test $(LIBS) smithmain.cxx
+#	$(CXX) $(CXXFLAGS) -o test $(LIBS) convexifiermain.cxx
 
 clean:	
 	$(RM) -rf $(OBJS) test libEv3.a

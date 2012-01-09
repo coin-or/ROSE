@@ -21,11 +21,17 @@
 
 int main(int argc, char** argv) {
 
+  using namespace std;
+
   ExpressionParser p;
   Expression e, f;
   int nerr;
 
+  e = p.Parse("1 + x", nerr);
+  cout << e->GetSize() << endl;
+  cout << e->ToString() << endl;
 
+  /*
   // e = p.Parse("(x-2)^2 + (y-3)^2 + (z+1)^2", nerr);  
   // e=p.Parse("sin (13*(x-y)) * (x*x + y*exp (x)) + 3 * log (1 + x^4)", nerr);
   // e = p.Parse("(x1+x3)*x2 - 2*x1*(x3-1) +5*x1 + 3*x2 + x3^2", nerr);
@@ -34,17 +40,6 @@ int main(int argc, char** argv) {
   Simplify(&e);
   cout << e->ToString() << endl;
 
-  //int vi = 3;
-  int vi = 4;
-  string vn = "w";
-  
-  //Expression x(1, 1, "x1"), y(1, 2, "x2");
-  Expression schema = x1 * y2;
-    f = e->ReplaceBySchema(vi, vn, schema);
-  cout << e->ToString() << endl;
-  cout << f->ToString() << endl;
-
-/*
   // replace by sum
   f = e->ReplaceByOperator(vi, vn, SUM);
   while(!f->IsZero()) {

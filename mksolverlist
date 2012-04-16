@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 echo -n "#define ROSESOLVERLIST \"" > solverlist.h
 for i in `ls -1 solver_*.h | grep -v TEMPLATE | grep -v analyser | cut -d _ -f 2 | cut -d . -f 1` ; do echo -n "$i " ; done >> solverlist.h
 echo -n "\"" >> solverlist.h

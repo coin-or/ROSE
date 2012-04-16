@@ -5,7 +5,7 @@
 #          Common Public License
 # History: 050215 work started
 
-INSTALLDIR = /usr/local
+INSTALLDIR = /opt/local
 
 CXX		= c++
 #CXXFLAGS      = -g -DDEBUG -pg -DPROFILER
@@ -60,7 +60,7 @@ dir:
 	test -d external/ || mkdir external
 
 $(EXE):  $(LIBS) $(MAIN)
-	$(CXX) $(CXXFLAGS) -o $(EXE) $(LIBS) $(MAIN) -ldl $(AMPLLIB)
+	$(CXX) $(CXXFLAGS) -o $(EXE) $(LIBS) $(MAIN) $(AMPLLIB) -ldl
 
 #libf2cobj: $(F2CLIB)
 
@@ -98,7 +98,7 @@ distclean: clean Ev3clean libf2cclean
 	$(RM) -rf external/
 
 solver_RQuarticConvex.o: solver_RQuarticConvex.cxx solver_RQuarticConvex.h
-	test -f $(SQC) && cp $(SQC) $@ || $(CXX) -c $(CXXFLAGS) $(INCLUDES) -o $@ $<
+	test -f $(SQC) && cp $(SQC) $@ || $(CXX) -c $(INCLUDES) -o $@ $<
 
 %.o:    %.cxx %.h
 	$(CXX) -c $(CXXFLAGS) $(INCLUDES) -o $@ $<

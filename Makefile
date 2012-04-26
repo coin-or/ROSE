@@ -73,7 +73,7 @@ $(AMPLLIB):
 	mv -fv amplsolver/amplsolver.a external/libamplsolver.a
 
 nl2ros: $(AMPLLIB) nl2ros.cxx
-	$(CXX) $(INCLUDES) $(CXXFLAGS) -o nl2ros nl2ros.cxx -Iamplsolver -ldl $(AMPLLIB)
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -o nl2ros nl2ros.cxx -Iamplsolver $(AMPLLIB) -ldl
 
 cleanexe:
 	$(RM) -f $(EXE)
